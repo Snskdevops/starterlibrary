@@ -280,6 +280,8 @@ resource "vsphere_virtual_machine" "mongodb_vm" {
   datastore_id     = data.vsphere_datastore.mongodb_vm_datastore.id
   guest_id         = data.vsphere_virtual_machine.mongodb_vm_template.guest_id
   scsi_type        = data.vsphere_virtual_machine.mongodb_vm_template.scsi_type
+  firmware         = "efi"
+  wait_for_guest_net_timeout = 0
   tags = vsphere_tag.ibm_terraform_automation_mongodb_vm_tags[*].id
   clone {
     template_uuid = data.vsphere_virtual_machine.mongodb_vm_template.id
@@ -310,7 +312,22 @@ resource "vsphere_virtual_machine" "mongodb_vm" {
     label          = "${var.mongodb_vm_name}0.vmdk"
     size           = var.mongodb_vm_root_disk_size
     keep_on_remove = var.mongodb_vm_root_disk_keep_on_remove
-    datastore_id   = data.vsphere_datastore.mongodb_vm_datastore.id
+    datastore_id   = data.vsphere_datastore.mongodb_vm_datastore.
+    unit_number    = 0
+  }
+  disk {
+    label          = "${var.mongodb_vm_name}1.vmdk"
+    size           = var.mongodb_vm_root_disk_size
+    keep_on_remove = var.mongodb_vm_root_disk_keep_on_remove
+    datastore_id   = data.vsphere_datastore.mongodb_vm_datastore.
+    unit_number    = 1
+  }
+  disk {
+    label          = "${var.mongodb_vm_name}2.vmdk"
+    size           = var.mongodb_vm_root_disk_size
+    keep_on_remove = var.mongodb_vm_root_disk_keep_on_remove
+    datastore_id   = data.vsphere_datastore.mongodb_vm_datastore.
+    unit_number    = 2
   }
 
   # Specify the connection
@@ -608,6 +625,8 @@ resource "vsphere_virtual_machine" "nodejs_vm" {
   datastore_id     = data.vsphere_datastore.nodejs_vm_datastore.id
   guest_id         = data.vsphere_virtual_machine.nodejs_vm_template.guest_id
   scsi_type        = data.vsphere_virtual_machine.nodejs_vm_template.scsi_type
+  firmware         = "efi"
+  wait_for_guest_net_timeout = 0
   tags = vsphere_tag.ibm_terraform_automation_nodejs_vm_tags[*].id
   clone {
     template_uuid = data.vsphere_virtual_machine.nodejs_vm_template.id
@@ -639,6 +658,21 @@ resource "vsphere_virtual_machine" "nodejs_vm" {
     size           = var.nodejs_vm_root_disk_size
     keep_on_remove = var.nodejs_vm_root_disk_keep_on_remove
     datastore_id   = data.vsphere_datastore.nodejs_vm_datastore.id
+    unit_number    = 0
+  }
+  disk {
+    label          = "${var.nodejs_vm_name}1.vmdk"
+    size           = var.nodejs_vm_root_disk_size
+    keep_on_remove = var.nodejs_vm_root_disk_keep_on_remove
+    datastore_id   = data.vsphere_datastore.nodejs_vm_datastore.id
+    unit_number    = 1
+  }
+  disk {
+    label          = "${var.nodejs_vm_name}2.vmdk"
+    size           = var.nodejs_vm_root_disk_size
+    keep_on_remove = var.nodejs_vm_root_disk_keep_on_remove
+    datastore_id   = data.vsphere_datastore.nodejs_vm_datastore.id
+    unit_number    = 2
   }
 
   # Specify the connection
